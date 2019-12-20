@@ -1,7 +1,7 @@
 package org.acme;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -12,17 +12,22 @@ public class MongoBookRepository implements BookRepository{
     @Inject
     QuarkusMongoBookRepository repo;
 
+    @Inject
+    MongoBookMapper mapper;
+
     @Override
     public Book save(Book book) {
         book.setFrom("mongo");
-        MongoBook b = new MongoBook(book.getUuid(), book.getName(), book.getFrom());
+        MongoBook b = mapper.to(book);
         repo.persist(b);
-        return b;
+        return book;
     }
 
     @Override
     public List<Book> listAll() {
-        return new ArrayList<>(repo.listAll());
+        return repo.streamAll()
+                .map(mapper::to)
+                .collect(Collectors.toList());
     }
 
 }

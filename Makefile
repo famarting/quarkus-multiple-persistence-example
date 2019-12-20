@@ -1,19 +1,8 @@
+h2:
+	mvn clean compile install package -Ph2
 
-compile-h2:
-	mvn clean compile install -Ph2 -Dquarkus.profile=h2
-
-compile-mongo:
-	mvn clean compile install -Pmongo -Dquarkus.profile=mongo -DskipTests
-
-package-h2:
-	cd book-microservice
-	mvn package -Ph2 -Dquarkus.profile=h2
-	cd ..
-
-package-mongo:
-	cd book-microservice
-	mvn package -Pmongo -Dquarkus.profile=mongo -DskipTests
-	cd ..
+mongo:
+	mvn clean compile install package -Pmongo -DskipTests
 
 run:
 	java -jar book-microservice/target/book-microservice-1.0.0-SNAPSHOT-runner.jar
